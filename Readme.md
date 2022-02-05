@@ -12,7 +12,14 @@ pip install "uvicorn[standard]"
 pip install sqlalchemy
 pip install psycopg2
 ```
-### 3. Start the server
+
+### 3. Revise your .env file
+```
+cp example.env .env
+```
+and then fill in your database information.
+
+### 4. Start the server
 ```
 uvicorn main:app --reload
 ```
