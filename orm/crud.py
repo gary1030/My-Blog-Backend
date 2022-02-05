@@ -1,5 +1,7 @@
+from sqlalchemy import null
 from sqlalchemy.orm import Session
 
+from fastapi import HTTPException
 from . import models, schemas
 from datetime import datetime
 
@@ -19,10 +21,18 @@ def create_post(db: Session, post: schemas.PostCreate):
     return db_post
 
 def get_comments_by_post_id(db: Session, post_id: int):
+    post = db.query(models.Post).filter(models.Post.id == post_id).first()
+    if (post == None):
+        raise HTTPException(status_code=400, detail="Post not found")
     return db.query(models.Comment).filter(models.Comment.post_id == post_id).all()
 
-def create_comment(db: Session, item: schemas.CommentCreate, post_id: int):
-    db_comment = models.Comment(**item.dict(), owner_id=post_id)
+def create_comment(db: Session, comment: schemas.CommentCreate):
+    dateTimeObj = datetime.now()
+    post = db.query(models.Post).filter(models.Post.id == comment.post_id).first()
+    if (post == None):
+        raise HTTPException(status_code=400, detail="Post not found")
+
+    db_comment = models.Comment(post_id=comment.post_id, message=comment.message, time=dateTimeObj)
     db.add(db_comment)
     db.commit()
     db.refresh(db_comment)
