@@ -1,10 +1,11 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, DateTime
+from sqlalchemy import Column, ForeignKey, Integer, String, DateTime
 from sqlalchemy.orm import relationship
 
 from .database import Base
 
 
 class Post(Base):
+    """post"""
     __tablename__ = "post"
 
     id = Column(Integer, primary_key=True, index=True)
@@ -16,6 +17,7 @@ class Post(Base):
 
 
 class Comment(Base):
+    """comment"""
     __tablename__ = "comment"
 
     id = Column(Integer, primary_key=True, index=True)

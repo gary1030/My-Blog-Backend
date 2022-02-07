@@ -7,3 +7,5 @@ ALTER TABLE comment ALTER COLUMN id SET NOT NULL;
 ALTER SEQUENCE comment_id_seq OWNED BY comment.id;
 
 delete from post where id=4;
+
+select * from comment;

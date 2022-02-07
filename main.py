@@ -1,7 +1,4 @@
-from typing import Optional
-from pydantic import BaseModel
-
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import Depends, FastAPI
 from sqlalchemy.orm import Session
 
 from orm import crud, models, schemas
@@ -12,7 +9,10 @@ models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 # Dependency
+
+
 def get_db():
+    """used to connect to db"""
     db = SessionLocal()
     try:
         yield db
@@ -44,18 +44,22 @@ def read_root():
 def create_post(post: schemas.PostCreate, db: Session = Depends(get_db)):
     return crud.create_post(db=db, post=post)
 
+
 @app.get("/posts/")
 def get_posts(db: Session = Depends(get_db)):
     return crud.get_posts(db=db)
+
 
 @app.get("/post/{post_id}")
 def get_post(post_id: int, db: Session = Depends(get_db)):
     return crud.get_post(db=db, post_id=post_id)
 
-@app.post("/comment/")
-def create_comment(comment: schemas.CommentCreate, db: Session = Depends(get_db)):
-    return crud.create_comment(db=db, comment=comment)
 
-@app.get("/comment/{comment_id}")
+@app.post("/post/{post_id}/comment/")
+def create_comment(post_id: int, comment: schemas.CommentCreate, db: Session = Depends(get_db)):
+    return crud.create_comment(db=db, post_id=post_id, comment=comment)
+
+
+@app.get("/post/{post_id}/comment/")
 def get_comments_by_post_id(post_id: int, db: Session = Depends(get_db)):
     return crud.get_comments_by_post_id(db=db, post_id=post_id)

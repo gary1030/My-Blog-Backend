@@ -7,6 +7,10 @@ python -m venv blog-env
 ```
 ### 2. Install required packages
 ```
+pip install -r requirements.txt
+```
+or
+```
 pip install fastapi
 pip install "uvicorn[standard]"
 pip install sqlalchemy

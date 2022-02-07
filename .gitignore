@@ -1,3 +1,5 @@
 blog-env
 __pycache__
 .env
+.pylintrc
+.vscode
