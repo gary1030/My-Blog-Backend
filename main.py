@@ -1,4 +1,5 @@
 from fastapi import Depends, FastAPI
+from typing import List
 from sqlalchemy.orm import Session
 
 from orm import crud, models, schemas
@@ -40,26 +41,26 @@ def read_root():
 # def update_item(item_id: int, item: Item):
 #     return {"item_name": item.name, "item_id": item_id}
 
-@app.post("/post/")
-def create_post(post: schemas.PostCreate, db: Session = Depends(get_db)):
+@app.post("/post/", response_model=schemas.Post)
+def create_post(post: schemas.PostCreate, db: Session = Depends(get_db)) -> schemas.Post:
     return crud.create_post(db=db, post=post)
 
 
-@app.get("/posts/")
-def get_posts(db: Session = Depends(get_db)):
+@app.get("/posts/", response_model=List[schemas.Post])
+def get_posts(db: Session = Depends(get_db)) -> List[schemas.Post]:
     return crud.get_posts(db=db)
 
 
-@app.get("/post/{post_id}")
-def get_post(post_id: int, db: Session = Depends(get_db)):
+@app.get("/post/{post_id}", response_model=schemas.Post)
+def get_post(post_id: int, db: Session = Depends(get_db)) -> schemas.Post:
     return crud.get_post(db=db, post_id=post_id)
 
 
-@app.post("/post/{post_id}/comment/")
-def create_comment(post_id: int, comment: schemas.CommentCreate, db: Session = Depends(get_db)):
+@app.post("/post/{post_id}/comment/", response_model=schemas.Comment)
+def create_comment(post_id: int, comment: schemas.CommentCreate, db: Session = Depends(get_db)) -> schemas.Comment:
     return crud.create_comment(db=db, post_id=post_id, comment=comment)
 
 
-@app.get("/post/{post_id}/comment/")
-def get_comments_by_post_id(post_id: int, db: Session = Depends(get_db)):
+@app.get("/post/{post_id}/comment/", response_model=schemas.Comment)
+def get_comments_by_post_id(post_id: int, db: Session = Depends(get_db)) -> List[schemas.Comment]:
     return crud.get_comments_by_post_id(db=db, post_id=post_id)

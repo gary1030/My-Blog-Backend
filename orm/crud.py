@@ -1,17 +1,17 @@
 from datetime import datetime
-
+from typing import List
 from sqlalchemy.orm import Session
 
 from fastapi import HTTPException
 from . import models, schemas
 
 
-def get_post(db: Session, post_id: int):
+def get_post(db: Session, post_id: int) -> schemas.Post:
     """get a post"""
     return db.query(models.Post).filter(models.Post.id == post_id).first()
 
 
-def get_posts(db: Session, skip: int = 0, limit: int = 100):
+def get_posts(db: Session, skip: int = 0, limit: int = 100) -> List[schemas.Post]:
     """get all post (at most 100)"""
     return db.query(models.Post).offset(skip).limit(limit).all()
 
